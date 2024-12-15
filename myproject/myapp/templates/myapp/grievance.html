@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        {% load static %}
+        <meta charset='UTF-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <meta name="viewport" content="width=device-width,initial-scale-1.0">
+        <title>GrievancePro</title>
+        <link rel="icon" href="{% static 'images/logof.png' %}" type="image/png">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        </head>
+
+    <body>
+        <header>
+            <h2 class="logo">GrievancePro</h2>
+            <h3 style="color: white;"> Welcome, {{user.name}} !</h3>
+            <nav class="navigation">
+                <a href="#tickets">Tickets</a>
+                <a href="{% url 'user_dashboard' %}">Proflie</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </header>
+
+        
+        
+        <main>
+        
+        
+            <section class="raiseticket" style="color: white    ; width: 300px; height: 400px;">
+                <div class="ticketraise" style="background-color: black;">
+                    <h2 style="margin-bottom: 45px;">Raise Ticket</h2>
+                    <form method="POST" action="{% url 'user_dashboard' %}">
+                        {% csrf_token %}
+                        <div class="input-box ticket" style="display: none;">
+                            <input type="text" style="color: white;" id="text_input" name="name" value="{{ user.name }}" required>
+                            <label style="color: white;">Name</label>
+                        </div>
+                        <div class="input-box ticket">
+                            <input type="text" style="color: white;" id="email_input" name="title" required>
+                            <label style="color: white;">Title</label>
+                        </div>
+                        <div class="input-box ticket" style="margin-bottom: 33px;">
+                            <input  class ='ticket' style="color: white;" type="text" id="password_input" name="description" required>
+                            <label style="color: white;">Description</label>
+                        </div>
+                        <div style="margin-bottom: 2px;" >
+                            <label style="color: white;">Category:   </label>
+                            <select name="category" required>
+                                <option value="ticket">Ticket Based</option>
+                                <option value="security">Security</option>
+                            </select>
+                        </div>
+                            <br>
+                        
+                        <div style="margin-bottom: 2px;" >
+                            <label style="color: white;">Priority:   </label>
+                            <select name="priority" required>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div style="margin-bottom: 10px;" >
+                            <label style="color: white; ">Department: </label>
+                            <select name="department" required>
+                                <option value="Financal">Financal</option>
+                                <option value="Technical">Technical</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn" style ="margin: 5px; margin-bottom: 25px; width: 150px; height: 45px;
+                        margin-left: 10px;">Choose File</button>
+                        <button type="submit" href="{% url 'user_dashboard' %}" class="btn">Submit</button>
+                    </form>
+                </div>
+            </section>
+        
+            
+        </main>
+
+        <script src="{% static 'js/flow.js' %}"></script>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+
+</html>

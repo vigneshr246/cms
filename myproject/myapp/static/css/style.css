@@ -1,0 +1,389 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: black;
+    background-size: cover;
+    background-position: center;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+    backdrop-filter: blur(20px);
+}
+
+.logo {
+    font-size: 2em;
+    color: #fff;
+}
+
+.navigation a {
+    font-size: 1.1em;
+    color: #fff;
+    text-decoration: none;
+    margin-left: 40px;
+}
+
+.navigation a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .5s;
+
+}
+.navigation.color:hover{
+    transition: color 3s;
+    color: black;
+}
+.navigation a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.navigation .btnLoginpopup {
+    width: 130px;
+    height: 50px;
+    border: 2px solid #fff;
+    background: transparent;
+    margin-left: 20px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navigation .btnLoginpopup:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+.wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: auto;
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    display: none; /* Hidden by default */
+}
+
+.wrapper.active-popup {
+    display: block; /* Show when activated */
+}
+
+.icon-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #fff;
+}
+
+.form-box h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    padding-left: 35px;
+    border: none;
+    border-bottom: 2px solid #333;
+    background: transparent;
+    outline: none;
+    color: #333;
+}
+.input-box select {
+    width: 100%;
+    padding: 10px;
+    padding-left: 35px;
+    border: none;
+    border-bottom: 2px solid #333;
+    background: transparent;
+    outline: none;
+    color: #333;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 35px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: 0.5s;
+    color: #333;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+    top: -5px;
+    left: 5px;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.input-box .icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #333;
+    font-size: 1.2em;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.login-register {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.login-register a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+main {
+    padding: 180px 20px 100px 20px;
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.introduction {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #d7cccc;
+    margin-bottom: 80px;
+}
+
+.introduction h1 {
+    font-size: 2.5em;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.booking-info,
+.services,
+.issues{
+    margin-bottom: 60px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+}
+
+.contact {
+    margin-bottom: 60px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    background-color: #c3ddf0;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    color: #282626;
+}
+
+h2 {
+    font-size: 2em;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.services ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.services li {
+    background: #e9ecef; /* Light grey for list items */
+    margin: 10px 0;
+    padding: 10px;
+    padding-left: 30px;
+    border-radius: 5px;
+    color: #162938;
+}
+
+.issue-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.issue {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    flex-basis: 30%;
+    margin: 0 10px;
+    color: #162938;
+}
+
+.contact .input-box {
+    margin-bottom: 20px;
+}
+
+.contact .input-box input,
+.contact .input-box textarea {
+    width: 100%;
+    border: 2px solid #162938; /* Matching input border */
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    color: #162938;
+    background: transparent;
+}
+
+.contact .input-box label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 0.9em;
+    color: #162938;
+    font-weight: 500;
+}
+
+
+
+
+
+
+
+.booking-container {
+    margin-bottom: 60px; /* Space below the booking section */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9); /* Slightly opaque white background */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.booking-container h2 {
+    font-size: 2em;
+    color: #162938;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1em;
+    color: #162938;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #162938; /* Matching input border */
+    border-radius: 5px;
+    font-size: 1em;
+    color: #162938;
+    background: transparent;
+}
+
+.form-group input:focus,a
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff; /* Change border color on focus */
+}
+
+button[type="submit"] {
+    width: 100%;
+    height: 45px;
+    background: #162938; /* Matching button color */
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #fff;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #007bff; /* Lighter blue on hover */
+}
+
+.input-box .ticket {
+    color : white;
+
+}
+
+
+.raiseticket {
+    background-color: white;
+    width: 300px;
+    height: 400px;
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        {% load static %}
+        <meta charset='UTF-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <meta name="viewport" content="width=device-width,initial-scale-1.0">
+        <title>GrievancePro</title>
+        <link rel="icon" href="{% static 'images/logof.png' %}" type="image/png">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        </head>
+
+    <body>
+        <header>
+            <h2 class="logo">GrievancePro</h2>
+            <nav class="navigation">
+                <a href="#services">Services</a>
+                <a href="#issues">Contact</a>
+                <button class="btnLoginpopup">Login</button>
+                
+            </nav>
+        </header>
+
+        
+        
+        <main>
+            <section class="introduction">
+                <h1>Welcome to GrievancePro</h1>
+                <p>Your trusted service partner, we offer the best deals and unparalleled service.</p>
+            </section>
+            
+        
+            <section class="booking-info">
+                <h2>Resolving Issues Made Easy</h2>
+                <p>With GrievancePro, you can resolve issue quickly and securely. Our user-friendly platform allows you to add, drop and manage issues.</p>
+            </section>
+        
+            <section class="services" id="services">
+                <h2>Our Services</h2>
+                <ul>
+                    <li>24/7 Customer Support</li>
+                    <li>Status Updates</li>
+                    <li>Drop Options</li>
+                    <li>Exclusive Service and Support</li>
+                </ul>
+            </section>
+        
+            <section class="issues" id="issues">
+                <h2>Common Issues</h2>
+                <div class="issue-list">
+                    <div class="issue">
+                        <h3>Billing Discrepancies</h3>
+                        <p>Resolve issues with incorrect charges, overbilling, or unexpected fees. Get clarity and assistance to ensure accurate billing.</p>
+                    </div>
+                    <div class="issue">
+                        <h3>Service Interruptions</h3>
+                        <p>Experiencing disruptions? Report service outages and find guidance to restore seamless connectivity and access.</p>
+                    </div>
+                    <div class="issue">
+                        <h3>Product Malfunctions</h3>
+                        <p>Facing technical issues? Whether it's a faulty product or software glitch, troubleshoot and find solutions to maintain smooth operation.</p>
+                    </div>
+                </div>
+            </section>
+        
+            
+        </main>
+        <div class="wrapper">
+
+            <span class="icon-close" style="color: black;"><ion-icon name="close-outline"></ion-icon></span>
+        
+            <!-- Login Form -->
+            <div class="form-box login">
+                <h2>Login</h2>
+                <form method="POST" action="{% url 'login_form' %}">
+                    {% csrf_token %}
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+                        <input type="email" id="email_input" name="email" required>
+                        <label>Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                        <input type="password" id="password_input" name="pass" required>
+                        <label>Password</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox" id="checkbox_input" name="checkbox">Show Password</label>
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <div class="login-register">
+                        <p>Not registered yet? <a href="#" class="register-link">Register</a></p>
+                    </div>
+                </form>
+            </div>
+        
+            <!-- Registration Form -->
+            <div class="form-box register" style="display: none;"> <!-- Initially hidden -->
+                <h2>Registration</h2>
+                <form form method="POST" action="{% url 'registration_form' %}">
+                    {% csrf_token %}
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+                        <input type="text" id="user_input" name="user" required>
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+                        <input type="email" id="email_input1" name="email" required>
+                        <label>Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                        <input type="password" id="pass_input1" name="pass" required>
+                        <label>Password</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                        <input type="number" id="phone_input1" name="phone" required>
+                        <label>Password</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox" id="checkbox_input1" name="checkbox" value="yes">I agree to the terms & conditions</label>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                    <div class="login-register">
+                        <p>Already registered? <a href="#" class="login-link">Login</a></p>
+                    </div>
+                </form>
+            </div>
+        
+            <!-- Forgot Password Form -->
+
+            <div class="form-box forgot" style="display: none;"> <!-- Initially hidden -->
+                <h2>Forgot Password</h2>
+                <form method="POST" action="{% url 'forget_form' %}">
+                    {% csrf_token %}
+                    <div class="input-box">
+                        <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+                        <input type="email" id="email_input2" name="email" required>
+                        <label>Email</label>
+                    </div>
+                    <button type="submit" class="btn">Send Reset Link</button>
+                    <div class="login-register">
+                        <p>Remembered your password? <a href="#" class="login-link">Login</a></p>
+                    </div>
+                </form>
+            </div>
+
+            
+
+        <script src="{% static 'js/flow.js' %}"></script>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        {% load static %}
+        <meta charset='UTF-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <meta name="viewport" content="width=device-width,initial-scale-1.0">
+        <title>GrievancePro</title>
+        <link rel="icon" href="{% static 'images/logof.png' %}" type="image/png">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        </head>
+
+    <body>
+        <header>
+            <h2 class="logo">GrievancePro</h2>
+            <h3 style="color: white;"> Welcome, {{user.name}} !</h3>
+            <nav class="navigation">
+                <a href="{% url 'grievance' %}">Tickets</a>
+                <a href="{% url 'user_dashboard' %}">Proflie</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </header>
+
+        
+        
+        <main>
+        
+            <section class="booking-info">
+                <h2>Resolving Issues Made Easy</h2>
+                <p>With GrievancePro, you can resolve issue quickly and securely. Our user-friendly platform allows you to add, drop and manage issues.</p>
+            </section>
+        
+        
+            
+        </main>
+
+        <script src="{% static 'js/flow.js' %}"></script>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </body>
+
+</html>
