@@ -16,6 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 AUTH_USER_MODEL = 'myapp.User'
 
+# settings.py
+LOGIN_REDIRECT_URL = '/admin/myapp/grievance/'  # Replace 'myapp/grievance/' with your exact admin URL
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

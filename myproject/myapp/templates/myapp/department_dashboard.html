@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset='UTF-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ department_name }} Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h2 class="logo">Department Dashboard: {{ department_name }} 
+            <span style="font-size: 25px;">Welcome, {{ user.name }}!</span>
+        </h2>
+        <nav class="navigation">
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="chart-container">
+            <div class="chart-left">
+                <h2 style="color: #fff;">Grievance Status</h2>
+                <canvas id="statusChart"></canvas>
+            </div>
+            <div class="chart-right">
+                <h2 style="color: #fff;">Issues Over Time</h2>
+                <canvas id="timelineChart"></canvas>
+            </div>
+        </div>
+
+        <div class="total-complaints" style="text-align: center;">
+            <h2 style="color: #fff;">Total Complaints: {{ total_complaints }}</h2>
+        </div>
+
+        <div class="complaints-table">
+            <h2 style="color: #fff; text-align: center;">All Complaints</h2>
+            <table style="width: 100%; color: #fff;">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for complaint in all_complaints %}
+                        <tr>
+                            <td>{{ complaint.title }}</td>
+                            <td>{{ complaint.category }}</td>
+                            <td>{{ complaint.get_status_display }}</td>
+                            <td>{{ complaint.get_priority_display }}</td>
+                            <td>{{ complaint.created_at }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-feedbacks" style="text-align: center;">
+            <h2 style="color: #fff;">Total Feedbacks: {{ countfb }}</h2>
+        </div>
+
+        <div class="feedback-table">
+            <h2 style="color: #fff; text-align: center;">Feedbacks</h2>
+            <table style="width: 100%; color: #fff;">
+                <thead>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Comments</th>
+                        <th>Created At</th>
+                        <th>Grievance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feedback in feedbacks %}
+                        <tr>
+                            <td>{{ feedback.rating }}</td>
+                            <td>{{ feedback.comments }}</td>
+                            <td>{{ feedback.created_at }}</td>
+                            <td>{{ feedback.grievance }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const statusData = JSON.parse('{{ status_data|escapejs }}');
+            const timelineData = JSON.parse('{{ timeline_data|escapejs }}');
+
+            const statusLabels = Object.keys(statusData);
+            const statusValues = Object.values(statusData);
+
+            const ctx1 = document.getElementById('statusChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'pie',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: statusValues,
+                        backgroundColor: ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99']
+                    }]
+                }
+            });
+
+            const timelineLabels = timelineData.map(item => item.date);
+            const timelineValues = timelineData.map(item => item.count);
+
+            const ctx2 = document.getElementById('timelineChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: timelineLabels,
+                    datasets: [{
+                        label: 'Issues Over Time',
+                        data: timelineValues,
+                        backgroundColor: '#4CAF50'
+                    }]
+                }
+            });
+        });
+    </script>
+</body>
+</html>

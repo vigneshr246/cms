@@ -1,43 +1,47 @@
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
 from .models import User,Grievance,Category
-from .forms import GrievanceForm, LoginForm, RegistrationForm
+from .forms import FeedbackForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Grievance
+from django.contrib import admin
+from django.db.models.functions import TruncDate
 from django.db.models import Count
-from datetime import datetime
 
 import json
 from django.shortcuts import render
-from .models import Grievance
+from .models import Grievance, Feedback
 from django.db.models import Count
 
 def admin_dashboard(request):
     if not request.user.is_authenticated or request.user.role != 'admin':
         return redirect('home')
 
-    # Data for Pie Chart (Status of Issues)
-    grievance_status_count = Grievance.objects.values('status').annotate(count=Count('status')).order_by('status')
+    status_counts = Grievance.objects.values('status').annotate(count=Count('status'))
+    status_data = {status['status']: status['count'] for status in status_counts}
+    total_complaints = Grievance.objects.count()
+    all_complaints = Grievance.objects.all()
+    feedbacks = Feedback.objects.all()
+    total_fb = Feedback.objects.count()
+    timeline_data = Grievance.objects.annotate(date=TruncDate('created_at')) \
+                                    .values('date') \
+                                    .annotate(count=Count('id')) \
+                                    .order_by('date')
 
-    # Data for Timeline (Total Issues Over Time)
-    grievances_over_time = Grievance.objects.values('created_at__date').annotate(count=Count('id')).order_by('created_at__date')
-
-    # Prepare the data for the pie chart and timeline
-    status_data = {status['status']: status['count'] for status in grievance_status_count}
-    timeline_data = {
-        str(grievance['created_at__date']): grievance['count'] for grievance in grievances_over_time
-    }
-
-    # Serialize the data to JSON
-    status_data_json = json.dumps(status_data)
-    timeline_data_json = json.dumps(timeline_data)
-
+    formatted_timeline_data = [
+        {'date': str(item['date']), 'count': item['count']} 
+        for item in timeline_data
+    ]
     context = {
-        'status_data': status_data_json,
-        'timeline_data': timeline_data_json,
+        'status_data': json.dumps(status_data),
+        'timeline_data': json.dumps(formatted_timeline_data),
+        'total_complaints': total_complaints,
+        'all_complaints': all_complaints,
+        'feedbacks' : feedbacks,
+        'countfb' : total_fb,
     }
 
     return render(request, 'myapp/admin_dashboard.html', context)
@@ -75,7 +79,13 @@ def login_view(request):
 def user_dashboard(request):
     if not request.user.is_authenticated or request.user.role != 'user':
         return redirect('home')
-    return render(request, 'myapp/user_dashboard.html')
+    name = request.user.name
+    ticket = User.objects.filter(Q(name=name))
+    context = {
+        'ticket' : ticket,
+    }
+    print(context)
+    return render(request, 'myapp/user_dashboard.html',context)
 
 def register_view(request):
     if request.method == 'POST':
@@ -117,9 +127,16 @@ def homepage(request):
 def logout(request):
     return render(request, 'myapp/home.html')
 
+from django.db.models import Q
+
 
 def grievance(request):
     
+    name = request.user.name
+    ticket = Grievance.objects.filter(Q(user=name))
+    context = {
+        'tickets' : ticket,
+    }
     if request.method == 'POST':
         user= request.POST.get('user')
         title = request.POST.get('title')
@@ -135,5 +152,84 @@ def grievance(request):
         grievance.save()
         messages.success(request, "Ticket raised successfully")
         return redirect('user_dashboard')
-    return render(request, 'myapp/grievance.html')
 
+
+    return render(request, 'myapp/grievance.html',context)
+
+
+
+
+
+
+@login_required
+def feedback(request):
+    # Filter grievances for the logged-in user with status 'escalated' or 'resolved'
+    user_name = request.user.name  # Assuming the User model has a 'name' field
+    user_grievances = Grievance.objects.filter(
+        Q(user=user_name) & Q(status__in=['escalated', 'resolved'])
+    )
+
+    # Handle GET and POST requests
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            grievance_title = form.cleaned_data.get('grievance')  # Use cleaned_data for safety
+            try:
+                grievance = Grievance.objects.get(title=grievance_title, user=user_name)
+                # Check if feedback already exists for this grievance
+                if not Feedback.objects.filter(grievance=grievance).exists():
+                    feedback = form.save(commit=False)
+                    feedback.user = request.user
+                    feedback.grievance = grievance
+                    feedback.save()
+                    return redirect('user_dashboard')  # Redirect on successful feedback submission
+                else:
+                    error_message = "Feedback already exists for this grievance."
+            except Grievance.DoesNotExist:
+                error_message = "Selected grievance does not exist."
+        else:
+            error_message = "Invalid form submission."
+    else:
+        form = FeedbackForm()
+        error_message = None
+
+    # Render the feedback form
+    return render(request, 'myapp/feedback.html', {
+        'form': form,
+        'user_grievances': user_grievances,
+        'error_message': error_message
+    })
+
+
+
+def department_dashboard(request, department_name):
+    if request.user.department != department_name:
+        return HttpResponse("You are not authorized to view this page.", status=403)
+
+    # Filter complaints and feedback for the particular department
+    department_complaints = Grievance.objects.filter(department=department_name)
+    department_feedback = Feedback.objects.filter(grievance__department=department_name)
+
+    # Data for charts
+    status_data = department_complaints.values('status').annotate(count=Count('id'))
+    timeline_data = department_complaints.extra({'date': "DATE(created_at)"}).values('date').annotate(count=Count('id'))
+
+    # Transform data for charts
+    status_data_dict = {item['status']: item['count'] for item in status_data}
+    timeline_data_list = [{'date': item['date'], 'count': item['count']} for item in timeline_data]
+
+    # Count totals
+    total_complaints = department_complaints.count()
+    total_feedbacks = department_feedback.count()
+
+    context = {
+        'department_name': department_name,
+        'total_complaints': total_complaints,
+        'countfb': total_feedbacks,
+        'all_complaints': department_complaints,
+        'feedbacks': department_feedback,
+        'status_data': status_data_dict,
+        'timeline_data': timeline_data_list,
+    }
+
+    return render(request, 'department_dashboard.html', context)

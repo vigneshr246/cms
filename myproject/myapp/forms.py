@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from .models import User,Category
+from .models import Feedback, User,Category
 from .models import Department,Grievance ,Priority
 
 
@@ -91,3 +91,19 @@ class GrievanceForm(forms.ModelForm):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), empty_label="Select Department", label="Department")
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Select Category", label="Category")
 
+
+class FeedbackForm(forms.ModelForm):
+    rating = forms.IntegerField(
+        min_value=1, 
+        max_value=5, 
+        label="Rating (1-5)",
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    comments = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        label="Comments"
+    )
+    class Meta:
+        model = Feedback
+        fields = [ 'rating', 'comments']

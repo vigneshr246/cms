@@ -50,7 +50,7 @@ class User(AbstractUser):
     is_superuser = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     role = models.CharField(max_length=50, default='user')
-
+    department = models.CharField(max_length=50, default='')
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

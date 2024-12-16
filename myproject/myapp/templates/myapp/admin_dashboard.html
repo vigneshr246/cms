@@ -13,17 +13,17 @@
 
     <body>
         <header>
-            <h2 class="logo">Admin Dashboard</h2>
-            <h3 class="introduction" style="color: white; margin-top: 5px;">Welcome,  {{ user.name }} !</h3>
+            <h2 class="logo" id="1">Admin Dashboard &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 25px;">Welcome,  {{ user.name }} !</span></h2>
             <nav class="navigation">
-                <a href="#" class="viewusers">Manage Users</a>
-                <a href="#totalcomplaints" class="viewcomplaints">View All Complaints</a>
+                <a href="#" class="viewusers">Status</a>
+                <a href="#totalcomplaints" class="viewcomplaints">Complaints</a>
+                <a href="#4" >Feedbacks</a>
                 <a href="{% url 'logout' %}">Logout</a>
             </nav>
         </header>
 
         <main>
-            <div class="chart-container" >
+            <div class="chart-container" id="123">
                 <div class="chart-left" style="margin-right: 90px;">
                     <h2 style="color: #fff;">Grievance Status</h2>
                     <canvas id="statusChart"></canvas>
@@ -38,7 +38,7 @@
                 <h2 style="color: #fff;">Total Complaints: {{ total_complaints }}</h2>
             </div>
             
-            <div class="complaints-table" style="margin-top: 40px;">
+            <div class="complaints-table" style="margin-top: 50px;">
                 <h2 style="color: #fff; text-align: center;">All Complaints</h2>
                 <table style="width: 100%; color: #fff; border-collapse: collapse;">
                     <thead>
@@ -60,6 +60,38 @@
                                 <td style="padding: 10px;">{{ complaint.get_priority_display }}</td>
                                 <td style="padding: 10px;">{{ complaint.department }}</td>
                                 <td style="padding: 10px;">{{ complaint.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-complaints" id="4" style="text-align: center; margin-top: 75px;">
+                <h2 style="color: #fff;">Total Feedbacks: {{ countfb }}</h2>
+            </div>
+
+            <div class="complaints-table" style="margin-top: 40px;" >
+                <h2 style="color: #fff; text-align: center;">Feedbacks</h2>
+                <table style="width: 100%; color: #fff; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; text-align: left;">Id</th>
+                            <th style="padding: 10px; text-align: left;">Rating</th>
+                            <th style="padding: 10px; text-align: left;">Comments</th>
+                            <th style="padding: 10px; text-align: left;">Created</th>
+                            <th style="padding: 10px; text-align: left;">UserId</th>
+                            <th style="padding: 10px; text-align: left;">GrievanceId</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feedback in feedbacks %}
+                            <tr>
+                                <td style="padding: 10px;">{{ feedback.id }}</td>
+                                <td style="padding: 10px;">{{ feedback.rating }}</td>
+                                <td style="padding: 10px;">{{ feedback.comments }}</td>
+                                <td style="padding: 10px;">{{ feedback.created_at }}</td>
+                                <td style="padding: 10px;">{{ feedback.user_id }}</td>
+                                <td style="padding: 10px;">{{ feedback.grievance }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
